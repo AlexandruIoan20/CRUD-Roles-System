@@ -6,7 +6,41 @@ import { auth } from "@/lib/auth";
 import { FormState } from "@/lib/utils";
 import { roleFormSchema } from "@/schemas/roleFormSchema";
 
+import { getUserByEmail } from "@/app/actions";
+
+const simplifyString = (string: string) => {
+  string = string.toLocaleLowerCase();
+
+  string = string.replace(/\s+/g, ''); // fara spatii
+
+  const diacriticsMap: Record<string, string> = {
+    ă: 'a',
+    â: 'a',
+    î: 'i',
+    ș: 's',
+    ţ: 't',
+    ț: 't',
+  };
+
+  string = string.replace(/[ăâîșșțț]/g, (match) => diacriticsMap[match] || match);
+  string = string.replace(/(.)\1+/g, '$1');
+
+  return string;
+}
+
+const validateRoleTitle = async (title: string) => { 
+    const simpleRoleTitle = simplifyString(title); 
+
+    let roles = await db.role.findMany();
+    
+    for(let i = 0; i < roles.length; i++) roles[i].title = simplifyString(roles[i].title);
+    for(let i = 0; i < roles.length; i++) if(roles[i].title == simpleRoleTitle) return false; 
+
+    return true; 
+}
+
 export async function createRole(formData: FormData): Promise<FormState> { 
+    // Verify that the user is authenticated
     const session = await auth();
 
     if(!session || !session?.user) { 
@@ -18,6 +52,7 @@ export async function createRole(formData: FormData): Promise<FormState> {
 
     console.log({ session })
 
+    // Validate the form data
     const addRoleFormData = Object.fromEntries(formData); 
     const verifyFormData = roleFormSchema.safeParse(addRoleFormData); 
 
@@ -34,13 +69,9 @@ export async function createRole(formData: FormData): Promise<FormState> {
 
     console.log({ rawFormData }); 
 
-    const creator = await db.user.findUnique({ 
-        where: { 
-            email: session.user.email || ""
-        }, select: { 
-            id: true, 
-        }
-    }); 
+    // Find the creator by email in the database
+    const creator = await getUserByEmail(session.user.email as string);
+    console.log("Creator: ", creator);
 
     if(!creator) { 
         return { 
@@ -49,6 +80,15 @@ export async function createRole(formData: FormData): Promise<FormState> {
         }
     }
 
+    // Look for already existing roles
+    const isRoleTitleValid = await validateRoleTitle(rawFormData.title); 
+    if(!isRoleTitleValid) {
+        return { 
+            message: "Role with this title already exists.", 
+            success: false,
+        }
+    }
+    
     try { 
         const newRole = await db.role.create({ 
             data: { 

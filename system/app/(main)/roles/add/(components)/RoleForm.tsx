@@ -46,6 +46,7 @@ export const RoleForm = () => {
             console.log(error); 
         } finally { 
             setLoading(false); 
+            form.reset(); 
         }
     }; 
 
