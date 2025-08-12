@@ -113,3 +113,15 @@ export const getRoles = async () => {
 
     return roles; 
 }
+
+export const deleteRoleById = async (roleId: string) => { 
+    try { 
+        await db.role.delete({ 
+            where: { 
+                id: roleId
+            }
+        }); 
+    } catch(error) { 
+        throw new Error("An error occured during the deletion of a role"); 
+    }
+}

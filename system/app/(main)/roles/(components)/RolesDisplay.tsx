@@ -1,10 +1,12 @@
-"use client"; 
+"use client"
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 import { Role } from "@/generated/prisma";
 import { GoTrash } from "react-icons/go"; 
+
+import { deleteRoleById } from "../actions";
 
 interface RolesDisplayProps { 
     roles: Role[], 
@@ -22,9 +24,9 @@ export const RolesDisplay = ({ roles }: RolesDisplayProps) => {
                         <div className = "border-2 border-black m-2">
                             { roles.map((role) => { 
                                 return ( 
-                                    <div className = "flex items-center justify-between mx-4 my-2">
+                                    <div key = { role.id } className = "flex items-center justify-between mx-4 my-2">
                                         { role.title }
-                                        <Button>
+                                        <Button onClick = { async() => { await deleteRoleById(role.id)}}>
                                             <GoTrash /> 
                                         </Button>
                                     </div>
