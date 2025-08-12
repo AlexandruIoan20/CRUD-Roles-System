@@ -14,3 +14,8 @@ export const getAllUsers = async () => {
     const users = await db.user.findMany(); 
     return users; 
 }
+
+export const getAllRoles = async () =>  { 
+    const roles = await db.role.findMany(); 
+    return roles; 
+}

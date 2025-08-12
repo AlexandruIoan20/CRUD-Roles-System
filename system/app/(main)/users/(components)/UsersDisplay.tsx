@@ -1,14 +1,16 @@
 "use client"; 
 
-import { User } from "@/generated/prisma"; 
+import { User, Role } from "@/generated/prisma"; 
 
 import { UserCard } from "./UserCard";
 
+
 interface UsersDisplayProps { 
-    users: User[]
+    users: User[], 
+    roles: Role[], 
 }
 
-export const UsersDisplay = ({ users }: UsersDisplayProps) => { 
+export const UsersDisplay = ({ users, roles }: UsersDisplayProps) => { 
     return ( 
         <div> 
             { users.length === 0 ? 
@@ -16,10 +18,10 @@ export const UsersDisplay = ({ users }: UsersDisplayProps) => {
                     <div> No user found. </div>
                 ) : 
                 ( 
-                    <div className = "border border-black m-2">
+                    <div className = "m-2">
                         { users.map((user) => { 
                             return ( 
-                                <UserCard key = { user.id } user = { user } />
+                                <UserCard key = { user.id } user = { user } roles = { roles } />
                             )
                         })}
                     </div>
