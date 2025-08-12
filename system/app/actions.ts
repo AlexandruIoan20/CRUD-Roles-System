@@ -9,3 +9,8 @@ export const getUserByEmail = async (email: string) => {
 
     return user; 
 }
+
+export const getAllUsers = async () => { 
+    const users = await db.user.findMany(); 
+    return users; 
+}

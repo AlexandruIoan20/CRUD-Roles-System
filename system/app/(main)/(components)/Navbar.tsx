@@ -6,6 +6,7 @@ export const Navbar = () => {
         <nav className = "flex justify-between items-center p-4 bg-gray-800 text-white">
             CRUD Roles System
             <Link href = "/roles"> Roles </Link>
+            <Link href = "/users"> Users </Link>
             <LogoutButton />
         </nav>
     )
