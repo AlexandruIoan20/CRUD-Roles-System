@@ -115,7 +115,7 @@ export const getRoles = async () => {
     return roles; 
 }
 
-export const deleteRoleById = async (roleId: string) => { 
+export async function deleteRoleById (roleId: string): Promise<FormState> { 
     try { 
         await db.role.delete({ 
             where: { 
@@ -124,7 +124,16 @@ export const deleteRoleById = async (roleId: string) => {
         }); 
 
         revalidatePath("/roles"); 
+        return { 
+            message: "Role deleted successfully", 
+            success: true, 
+        }
     } catch(error) { 
-        throw new Error("An error occured during the deletion of a role"); 
+        console.log(error); 
+        return { 
+            message: "An error occured during the action.", 
+            success: false, 
+        }
+
     }
 }
