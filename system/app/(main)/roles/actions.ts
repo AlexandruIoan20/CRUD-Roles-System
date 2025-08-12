@@ -7,6 +7,7 @@ import { FormState } from "@/lib/utils";
 import { roleFormSchema } from "@/schemas/roleFormSchema";
 
 import { getUserByEmail } from "@/app/actions";
+import { revalidatePath } from "next/cache";
 
 const simplifyString = (string: string) => {
   string = string.toLocaleLowerCase();
@@ -121,6 +122,8 @@ export const deleteRoleById = async (roleId: string) => {
                 id: roleId
             }
         }); 
+
+        revalidatePath("/roles"); 
     } catch(error) { 
         throw new Error("An error occured during the deletion of a role"); 
     }
