@@ -1,10 +1,12 @@
-import { LogoutButton } from "./LogoutButton"
+import { LogoutButton } from "./LogoutButton"; 
+import Link from "next/link";
 
 export const Navbar = () => { 
     return ( 
-        <div>
-            Navbar
+        <nav className = "flex justify-between items-center p-4 bg-gray-800 text-white">
+            CRUD Roles System
+            <Link href = "/roles"> Roles </Link>
             <LogoutButton />
-        </div>
+        </nav>
     )
 }

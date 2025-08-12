@@ -7,7 +7,6 @@ import { saltAndHashPassword } from "@/utils/helpers";
 import { FormState } from "@/lib/utils";
 import { PrismaClientKnownRequestError, raw } from "@prisma/client/runtime/library";
 import { authFormSchema } from "@/schemas/authFormSchema";
-import { sign } from "crypto";
 
 const getUserByNameOrEmail = async (name: string, email: string) => { 
     try { 
