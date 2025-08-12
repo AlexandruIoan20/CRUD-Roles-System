@@ -1,13 +1,13 @@
-"use client"; 
+import { RolesDisplay } from "./(components)/RolesDisplay";
+import { getRoles } from "./actions";
 
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-
-export default function RolesPage() { 
-    const router = useRouter(); 
+export default async function RolesPage() { 
+    const roles = await getRoles(); 
+    console.log({ roles }); 
     return ( 
         <div>
-            <Button onClick = { () => { router.push("/roles/add")}}> Add Role </Button>
+            <h1 className="text-2xl font-bold mb-4">Roles</h1>
+            <RolesDisplay roles = { roles } />
         </div>
     )
 }

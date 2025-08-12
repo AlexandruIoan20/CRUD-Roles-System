@@ -107,3 +107,9 @@ export async function createRole(formData: FormData): Promise<FormState> {
         return { message: "Failed to create role.", success: false };
     }
 }
+
+export const getRoles = async () => { 
+    const roles = await db.role.findMany(); 
+
+    return roles; 
+}
