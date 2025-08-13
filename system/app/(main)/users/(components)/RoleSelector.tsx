@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { User, Role } from "@/generated/prisma"
+import { User, Role } from "@/generated/prisma"; 
 
 interface RoleSelectorProps { 
     roles: Role[], 
@@ -9,7 +9,6 @@ interface RoleSelectorProps {
 }
 
 export const RoleSelector = ({ roles, user, onToggleRole, selectedRoleIds }: RoleSelectorProps) => { 
-    console.log({ user }); 
     return ( 
         <div>
             { roles.map((role) => { 

@@ -1,7 +1,7 @@
 import { Role, User } from "@/generated/prisma";
+import { selectRolesForUser } from "../actions";
 
 import { RoleSelector } from "./RoleSelector";
-
 import { useState } from "react";
 
 // Shadcn Components
@@ -27,7 +27,14 @@ export const UserCard = ({ user, roles }: UserCardProps) => {
 
     const toggleRole = (roleId: string) => { 
         setSelectedRoleIds(prev => prev.includes(roleId) ? prev.filter(id => id !== roleId) : [...prev, roleId]); 
-        console.log({ selectedRoleIds }); 
+    }
+
+    const handleSelectRoles = async () => { 
+        try { 
+            await selectRolesForUser(user, selectedRoleIds || []); 
+        } catch(error) { 
+            console.log(error); 
+        }
     }
 
     return ( 
@@ -60,8 +67,8 @@ export const UserCard = ({ user, roles }: UserCardProps) => {
                             </Button>
                         </DialogClose>
                         <Button
-                            type = "button"
-                            onClick = { () => { } }
+                            type = "submit"
+                            onClick = { async () => { await handleSelectRoles() } }
                         >
                             Select
                         </Button>
