@@ -1,16 +1,15 @@
 'use server'; 
 
-import { User } from "@/generated/prisma";
 import { db } from "@/lib/prisma";
 
 import { FormState } from "@/lib/utils";
 
-export async function selectRolesForUser(user: User, roleIds: string[]): Promise<FormState> {
+export async function selectRolesForUser(userId: string, roleIds: string[]): Promise<FormState> {
     try { 
         // Find the user to select the roles
         const selectedUser = await db.user.findUnique({ 
             where: { 
-                email: user.email as string, 
+                id: userId, 
             }, 
             include: { 
                 userRole: true,

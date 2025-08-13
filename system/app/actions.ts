@@ -11,7 +11,15 @@ export const getUserByEmail = async (email: string) => {
 }
 
 export const getAllUsers = async () => { 
-    const users = await db.user.findMany(); 
+    const users = await db.user.findMany(
+        {
+            select: { 
+                id: true, 
+                name: true, 
+                userRole: true, 
+            }
+        }
+    ); 
     return users; 
 }
 

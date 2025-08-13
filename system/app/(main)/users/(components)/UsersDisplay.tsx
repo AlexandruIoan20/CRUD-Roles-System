@@ -1,12 +1,17 @@
 "use client"; 
 
-import { User, Role } from "@/generated/prisma"; 
+import { Role, UserRole } from "@/generated/prisma"; 
 
 import { UserCard } from "./UserCard";
 
+export interface SelectedUserInterface { 
+    id: string, 
+    name: string, 
+    userRole: UserRole[], 
+}
 
 interface UsersDisplayProps { 
-    users: User[], 
+    users: SelectedUserInterface[], 
     roles: Role[], 
 }
 

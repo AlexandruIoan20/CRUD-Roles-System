@@ -1,4 +1,5 @@
-import { Role, User } from "@/generated/prisma";
+import { Role, UserRole } from "@/generated/prisma";
+import { SelectedUserInterface } from "./UsersDisplay";
 import { selectRolesForUser } from "../actions";
 
 import { RoleSelector } from "./RoleSelector";
@@ -18,12 +19,12 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface UserCardProps { 
-    user: User, 
+    user: SelectedUserInterface, 
     roles: Role[], 
 }
 
 export const UserCard = ({ user, roles }: UserCardProps) => {
-    const [ selectedRoleIds, setSelectedRoleIds] = useState<string[]> ([]); 
+    const [ selectedRoleIds, setSelectedRoleIds ] = useState<string[]> (user.userRole.map(ur => ur.roleId) || []); 
 
     const toggleRole = (roleId: string) => { 
         setSelectedRoleIds(prev => prev.includes(roleId) ? prev.filter(id => id !== roleId) : [...prev, roleId]); 
@@ -31,7 +32,7 @@ export const UserCard = ({ user, roles }: UserCardProps) => {
 
     const handleSelectRoles = async () => { 
         try { 
-            await selectRolesForUser(user, selectedRoleIds || []); 
+            await selectRolesForUser(user.id, selectedRoleIds || []); 
         } catch(error) { 
             console.log(error); 
         }
@@ -52,7 +53,6 @@ export const UserCard = ({ user, roles }: UserCardProps) => {
                         <RoleSelector
                             onToggleRole = { toggleRole }
                             roles = { roles }
-                            user = { user }
                             selectedRoleIds = { selectedRoleIds }
                         />
                     </DialogHeader>
@@ -66,12 +66,15 @@ export const UserCard = ({ user, roles }: UserCardProps) => {
                                 Close
                             </Button>
                         </DialogClose>
-                        <Button
-                            type = "submit"
-                            onClick = { async () => { await handleSelectRoles() } }
-                        >
-                            Select
-                        </Button>
+
+                        <DialogClose asChild>
+                            <Button
+                                type = "submit"
+                                onClick = { async () => { await handleSelectRoles() } }
+                            >
+                                Select
+                            </Button>
+                        </DialogClose>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
