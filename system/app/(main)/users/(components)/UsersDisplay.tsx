@@ -4,6 +4,16 @@ import { Role, UserRole } from "@/generated/prisma";
 
 import { UserCard } from "./UserCard";
 
+// Shadcn Components
+import {
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"; 
+
+
 export interface SelectedUserInterface { 
     id: string, 
     name: string, 
@@ -17,21 +27,18 @@ interface UsersDisplayProps {
 
 export const UsersDisplay = ({ users, roles }: UsersDisplayProps) => { 
     return ( 
-        <div> 
-            { users.length === 0 ? 
-                ( 
-                    <div> No user found. </div>
-                ) : 
-                ( 
-                    <div className = "m-2">
-                        { users.map((user) => { 
-                            return ( 
-                                <UserCard key = { user.id } user = { user } roles = { roles } />
-                            )
-                        })}
-                    </div>
-                )
-            }
+        <div className="w-full overflow-auto">
+        <Command className="w-full h-full">
+            <CommandInput placeholder="Search a user..." />
+            <CommandList className="w-full max-h-none h-auto overflow-visible">
+            <CommandEmpty>No user found.</CommandEmpty>
+            {users.map((user) => (
+                <CommandItem key={user.id}>
+                    <UserCard user={user} roles={roles} />
+                </CommandItem>
+            ))}
+            </CommandList>
+        </Command>
         </div>
     )
 }

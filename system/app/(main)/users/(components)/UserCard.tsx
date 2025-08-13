@@ -39,7 +39,7 @@ export const UserCard = ({ user, roles }: UserCardProps) => {
     }
 
     return ( 
-        <div className = "flex items-center justify-between border border-black m-2 p-2">
+        <div className = "flex items-center justify-between m-2 p-2">
             { user.name }
             <Dialog>
                 <DialogTrigger asChild>
